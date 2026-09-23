@@ -1,0 +1,54 @@
+<svg viewBox="0 0 760 460" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <rect width="760" height="460" fill="#ffffff"/>
+
+  <!-- PlacemarkModel -->
+  <rect x="40" y="30" width="260" height="140" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+  <line x1="40" y1="60" x2="300" y2="60" stroke="#333333" stroke-width="1.5"/>
+  <line x1="40" y1="120" x2="300" y2="120" stroke="#333333" stroke-width="1.5"/>
+  <text x="170" y="49" font-size="15" font-weight="bold" text-anchor="middle">PlacemarkModel</text>
+  <text x="50" y="78" font-size="12">+ id: Long</text>
+  <text x="50" y="96" font-size="12">+ title: String</text>
+  <text x="50" y="114" font-size="12">+ description: String</text>
+  <text x="50" y="140" font-size="11" fill="#555555">« data class »</text>
+  <text x="50" y="156" font-size="11" fill="#555555">auto: equals(), hashCode(),</text>
+
+  <!-- PlacemarkStore interface -->
+  <rect x="440" y="30" width="280" height="180" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+  <line x1="440" y1="72" x2="720" y2="72" stroke="#333333" stroke-width="1.5"/>
+  <text x="580" y="49" font-size="12" font-style="italic" text-anchor="middle">« interface »</text>
+  <text x="580" y="65" font-size="15" font-weight="bold" text-anchor="middle">PlacemarkStore</text>
+  <text x="450" y="90" font-size="12">+ findAll(): List&lt;PlacemarkModel&gt;</text>
+  <text x="450" y="108" font-size="12">+ create(placemark: PlacemarkModel)</text>
+  <text x="450" y="126" font-size="12">+ update(placemark: PlacemarkModel): Boolean</text>
+  <text x="450" y="144" font-size="12">+ delete(id: Long): Boolean</text>
+  <text x="450" y="162" font-size="12">+ findOne(id: Long): PlacemarkModel?</text>
+
+  <!-- PlacemarkMemStore -->
+  <rect x="440" y="300" width="280" height="140" fill="#ffffff" stroke="#333333" stroke-width="1.5"/>
+  <line x1="440" y1="330" x2="720" y2="330" stroke="#333333" stroke-width="1.5"/>
+  <line x1="440" y1="386" x2="720" y2="386" stroke="#333333" stroke-width="1.5"/>
+  <text x="580" y="319" font-size="15" font-weight="bold" text-anchor="middle">PlacemarkMemStore</text>
+  <text x="450" y="348" font-size="12">- placemarks: ArrayList&lt;PlacemarkModel&gt;</text>
+  <text x="450" y="366" font-size="12">- lastId: AtomicLong</text>
+  <text x="450" y="404" font-size="12">+ findAll(), create(), update(),</text>
+  <text x="450" y="422" font-size="12">+ delete(), findOne()</text>
+
+  <!-- Association: PlacemarkStore uses PlacemarkModel -->
+  <line x1="440" y1="120" x2="300" y2="100" stroke="#333333" stroke-width="1.2" marker-end="url(#openArrow)"/>
+  <text x="330" y="105" font-size="10" fill="#555555">uses</text>
+
+  <!-- Realization: PlacemarkMemStore ..|> PlacemarkStore -->
+  <line x1="580" y1="300" x2="580" y2="210" stroke="#333333" stroke-width="1.2" stroke-dasharray="6,4" marker-end="url(#hollowTriangle)"/>
+  <text x="595" y="260" font-size="11" fill="#555555">« implements »</text>
+
+  <defs>
+    <marker id="openArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#333333" stroke-width="1"/>
+    </marker>
+    <marker id="hollowTriangle" markerWidth="16" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#ffffff" stroke="#333333" stroke-width="1"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="450" font-size="11" fill="#777777">Placemark (Lab 1) — Domain model &amp; persistence abstraction</text>
+</svg>
