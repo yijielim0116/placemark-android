@@ -1,4 +1,4 @@
-package com.example.placedmark
+package org.setu.placemarklab2
 
 import org.junit.Test
 

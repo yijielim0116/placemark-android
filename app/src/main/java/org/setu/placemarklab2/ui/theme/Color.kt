@@ -1,4 +1,4 @@
-package com.example.placedmark.ui.theme
+package org.setu.placemarklab2.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

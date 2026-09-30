@@ -1,4 +1,4 @@
-package com.example.placedmark
+package org.setu.placemarklab2
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.placedmark", appContext.packageName)
+        assertEquals("org.setu.placemarklab2", appContext.packageName)
     }
 }

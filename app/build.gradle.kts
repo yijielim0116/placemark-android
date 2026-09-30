@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.placedmark"
+    namespace = "org.setu.placemarklab2"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.placedmark"
+        applicationId = "org.setu.placemarklab2"
         minSdk = 27
         targetSdk = 37
         versionCode = 1

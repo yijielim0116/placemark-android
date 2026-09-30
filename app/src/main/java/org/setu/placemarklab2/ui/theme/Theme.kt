@@ -1,4 +1,4 @@
-package com.example.placedmark.ui.theme
+package org.setu.placemarklab2.ui.theme
 
 import android.app.Activity
 import android.os.Build
