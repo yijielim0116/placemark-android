@@ -23,6 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddEditActivity"
+            android:exported="false"
+            android:label="Add / Edit Mark"
+            android:theme="@style/Theme.PlacedMark"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
