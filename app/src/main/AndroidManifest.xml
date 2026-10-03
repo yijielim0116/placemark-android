@@ -24,6 +24,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".MarkListActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddEditActivity"
             android:exported="false"
             android:label="Add / Edit Mark"
