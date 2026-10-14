@@ -8,8 +8,10 @@ lifecycleRuntimeKtx = "2.11.0"
 appcompat = "1.7.0"
 recyclerview = "1.4.0"
 activity = "1.13.0"
+timber = "5.0.1"
 
 [libraries]
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
