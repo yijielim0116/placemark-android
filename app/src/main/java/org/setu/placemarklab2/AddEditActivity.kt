@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import timber.log.Timber
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -45,10 +46,16 @@ class AddEditActivity : AppCompatActivity() {
 
         if (editingId != null) {
 
+            Timber.d("AddEditActivity opened to edit mark id=$editingId")
+
             findViewById<TextView>(R.id.formTitle)
                 .text = "Edit Mark"
 
             loadExistingMark(editingId!!)
+
+        } else {
+
+            Timber.d("AddEditActivity opened to add a new mark")
         }
 
         saveButton.setOnClickListener {
@@ -56,6 +63,7 @@ class AddEditActivity : AppCompatActivity() {
         }
 
         cancelButton.setOnClickListener {
+            Timber.d("Add/edit cancelled")
             finish()
         }
     }
@@ -66,6 +74,8 @@ class AddEditActivity : AppCompatActivity() {
             AppData.placedMarks.findOne(id)
 
         if (mark == null) {
+
+            Timber.w("Tried to edit mark id=$id but it was not found")
 
             Toast.makeText(
                 this,
@@ -92,6 +102,7 @@ class AddEditActivity : AppCompatActivity() {
             descriptionInput.text.toString().trim()
 
         if (title.isEmpty()) {
+            Timber.d("Save blocked: title is empty")
             titleInput.error = "Title is required"
             return
         }
@@ -100,6 +111,7 @@ class AddEditActivity : AppCompatActivity() {
             xInput.text.toString().toDoubleOrNull()
 
         if (x == null) {
+            Timber.d("Save blocked: x is not a valid number")
             xInput.error = "Enter a valid number"
             return
         }
@@ -108,6 +120,7 @@ class AddEditActivity : AppCompatActivity() {
             yInput.text.toString().toDoubleOrNull()
 
         if (y == null) {
+            Timber.d("Save blocked: y is not a valid number")
             yInput.error = "Enter a valid number"
             return
         }
@@ -120,6 +133,8 @@ class AddEditActivity : AppCompatActivity() {
                 x = x,
                 y = y
             )
+
+            Timber.d("Creating mark title=${mark.title}")
 
             AppData.placedMarks.create(mark)
 
@@ -138,6 +153,8 @@ class AddEditActivity : AppCompatActivity() {
                 x = x,
                 y = y
             )
+
+            Timber.d("Updating mark id=${mark.id}, title=${mark.title}")
 
             AppData.placedMarks.update(mark)
 
