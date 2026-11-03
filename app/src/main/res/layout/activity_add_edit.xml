@@ -40,14 +40,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="X coordinate"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal|numberSigned" />
 
         <EditText
             android:id="@+id/yInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Y coordinate"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal|numberSigned" />
+
+        <ImageView
+            android:id="@+id/imageViewAdd"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="16dp"
+            android:background="#EEEEEE"
+            android:contentDescription="Selected photo"
+            android:scaleType="centerCrop" />
+
+        <Button
+            android:id="@+id/imagePickButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick Image" />
 
         <Button
             android:id="@+id/saveButton"
