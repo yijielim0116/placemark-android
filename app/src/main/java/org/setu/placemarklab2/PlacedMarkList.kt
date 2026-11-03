@@ -14,12 +14,15 @@ class PlacedMarkList {
     }
 
     fun create(mark: PlacedMark) {
+        mark.validate()
         mark.id = lastId.incrementAndGet()
         placedMarks.add(mark)
         Timber.d("create: id=${mark.id}, title=${mark.title}")
     }
 
     fun update(mark: PlacedMark): Boolean {
+        // check before touching the stored one
+        mark.validate()
         val foundIndex = placedMarks.indexOfFirst { it.id == mark.id }
         return if (foundIndex != -1) {
             placedMarks[foundIndex] = mark

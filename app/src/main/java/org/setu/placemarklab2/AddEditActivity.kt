@@ -1,10 +1,14 @@
 package org.setu.placemarklab2
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
 
@@ -15,7 +19,35 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var xInput: EditText
     private lateinit var yInput: EditText
 
+    private lateinit var imagePreview: ImageView
+
+    // the photo I picked, null until I pick one
+    private var selectedImageUri: Uri? = null
+
     private var editingId: Long? = null
+
+    // opens the phone's file picker, uri comes back null if I cancel
+    private val imagePicker =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            if (uri != null) {
+                // ask to keep access to the photo so it still loads after the app restarts
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (_: SecurityException) {
+                    Timber.w("Could not keep access to $uri")
+                }
+
+                Timber.d("Picked image $uri")
+
+                selectedImageUri = uri
+                imagePreview.setImageURI(uri)
+            } else {
+                Timber.d("Image picker cancelled")
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +65,13 @@ class AddEditActivity : AppCompatActivity() {
 
         yInput =
             findViewById(R.id.yInput)
+
+        imagePreview =
+            findViewById(R.id.imageViewAdd)
+
+        findViewById<Button>(R.id.imagePickButton).setOnClickListener {
+            imagePicker.launch(arrayOf("image/*"))
+        }
 
         val saveButton =
             findViewById<Button>(R.id.saveButton)
@@ -91,6 +130,15 @@ class AddEditActivity : AppCompatActivity() {
         descriptionInput.setText(mark.desc)
         xInput.setText(mark.x.toString())
         yInput.setText(mark.y.toString())
+
+        // show the photo this mark already has, or the gallery icon if it has none
+        selectedImageUri = mark.imageUri?.let { Uri.parse(it) }
+
+        if (selectedImageUri != null) {
+            imagePreview.setImageURI(selectedImageUri)
+        } else {
+            imagePreview.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
     }
 
     private fun saveMark() {
@@ -131,12 +179,19 @@ class AddEditActivity : AppCompatActivity() {
                 title = title,
                 desc = description,
                 x = x,
-                y = y
+                y = y,
+                imageUri = selectedImageUri?.toString()
             )
 
             Timber.d("Creating mark title=${mark.title}")
 
-            AppData.placedMarks.create(mark)
+            // validate() throws if something is out of range, so show that message and stay on the form
+            try {
+                AppData.placedMarks.create(mark)
+            } catch (e: IllegalArgumentException) {
+                showValidationError(e)
+                return
+            }
 
             Toast.makeText(
                 this,
@@ -151,12 +206,18 @@ class AddEditActivity : AppCompatActivity() {
                 title = title,
                 desc = description,
                 x = x,
-                y = y
+                y = y,
+                imageUri = selectedImageUri?.toString()
             )
 
             Timber.d("Updating mark id=${mark.id}, title=${mark.title}")
 
-            AppData.placedMarks.update(mark)
+            try {
+                AppData.placedMarks.update(mark)
+            } catch (e: IllegalArgumentException) {
+                showValidationError(e)
+                return
+            }
 
             Toast.makeText(
                 this,
@@ -166,5 +227,15 @@ class AddEditActivity : AppCompatActivity() {
         }
 
         finish()
+    }
+
+    private fun showValidationError(e: IllegalArgumentException) {
+        Timber.d("Save blocked: ${e.message}")
+
+        Toast.makeText(
+            this,
+            e.message ?: "Please check the entered values.",
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

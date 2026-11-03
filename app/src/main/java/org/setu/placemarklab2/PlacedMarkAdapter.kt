@@ -1,8 +1,10 @@
 package org.setu.placemarklab2
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
@@ -14,6 +16,9 @@ class PlacedMarkAdapter(
 
     class MarkViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
+
+        val markImage: ImageView =
+            itemView.findViewById(R.id.markImage)
 
         val titleText: TextView =
             itemView.findViewById(R.id.titleText)
@@ -55,6 +60,15 @@ class PlacedMarkAdapter(
 
         holder.coordinatesText.text =
             "X: ${mark.x}, Y: ${mark.y}"
+
+        // the lab has setImageResource(imageUri) here but that takes an int, so I use setImageURI
+        val imageUri = mark.imageUri
+
+        if (imageUri != null) {
+            holder.markImage.setImageURI(Uri.parse(imageUri))
+        } else {
+            holder.markImage.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
 
         // the whole item is now the thing you tap, so no more buttons
         holder.itemView.setOnClickListener {
