@@ -26,6 +26,33 @@ class AddEditActivity : AppCompatActivity() {
 
     private var editingId: Long? = null
 
+    // the spot picked on the map, null until I pick one
+    private var selectedLatitude: Double? = null
+    private var selectedLongitude: Double? = null
+
+    // opens the map, and when I confirm a spot it fills in the x and y boxes
+    private val mapPicker =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data = result.data ?: return@registerForActivityResult
+
+                selectedLatitude = data.getDoubleExtra("latitude", 0.0)
+                selectedLongitude = data.getDoubleExtra("longitude", 0.0)
+
+                Timber.d("Map location picked lat=$selectedLatitude, lon=$selectedLongitude")
+
+                selectedLatitude?.let {
+                    xInput.setText(it.toString())
+                }
+
+                selectedLongitude?.let {
+                    yInput.setText(it.toString())
+                }
+            } else {
+                Timber.d("Map picker cancelled")
+            }
+        }
+
     // opens the phone's file picker, uri comes back null if I cancel
     private val imagePicker =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -71,6 +98,29 @@ class AddEditActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.imagePickButton).setOnClickListener {
             imagePicker.launch(arrayOf("image/*"))
+        }
+
+        findViewById<Button>(R.id.buttonLoc).setOnClickListener {
+            Timber.d("Pick Location pressed")
+            val intent = Intent(this, MapPickerActivity::class.java)
+
+            // start the map where this mark already is (or wherever I typed), instead of always Waterford
+            // only passed when both boxes are real coordinates, otherwise the map uses its default
+            val lat = xInput.text.toString().toDoubleOrNull()
+            val lon = yInput.text.toString().toDoubleOrNull()
+
+            if (lat != null && lon != null && lat in -90.0..90.0 && lon in -180.0..180.0) {
+                intent.putExtra("latitude", lat)
+                intent.putExtra("longitude", lon)
+            }
+
+            // the title shows up on the selected marker
+            val title = titleInput.text.toString().trim()
+            if (title.isNotEmpty()) {
+                intent.putExtra("title", title)
+            }
+
+            mapPicker.launch(intent)
         }
 
         val saveButton =
