@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- the map tiles are downloaded, so without this the map stays blank -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -32,6 +35,10 @@
             android:label="Add / Edit Mark"
             android:theme="@style/Theme.PlacedMark"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".MapPickerActivity"
+            android:exported="false"
+            android:label="Pick Location" />
     </application>
 
 </manifest>
