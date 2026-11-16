@@ -22,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         }
         Timber.d("MainActivity created")
 
+        // load the saved marks before any screen asks for them
+        AppData.initialize(this)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
