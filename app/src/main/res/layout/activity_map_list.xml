@@ -5,7 +5,7 @@
     android:id="@+id/mapListRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapListActivity">
+    tools:context=".views.maplist.MapListView">
 
     <!-- the map takes the top 60%, the info panel takes whatever is left underneath -->
     <androidx.constraintlayout.widget.Guideline

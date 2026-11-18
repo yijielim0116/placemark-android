@@ -27,20 +27,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MarkListActivity"
+            android:name=".views.marklist.MarkListView"
             android:exported="false" />
         <activity
-            android:name=".AddEditActivity"
+            android:name=".views.addedit.AddEditView"
             android:exported="false"
             android:label="Add / Edit Mark"
             android:theme="@style/Theme.PlacedMark"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".MapPickerActivity"
+            android:name=".views.mappicker.MapPickerView"
             android:exported="false"
             android:label="Pick Location" />
         <activity
-            android:name=".MapListActivity"
+            android:name=".views.maplist.MapListView"
             android:exported="false"
             android:label="Map" />
     </application>
