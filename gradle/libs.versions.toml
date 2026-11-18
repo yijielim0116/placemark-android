@@ -11,8 +11,10 @@ activity = "1.13.0"
 timber = "5.0.1"
 osmdroid = "6.1.20"
 gson = "2.13.2"
+constraintlayout = "2.2.1"
 
 [libraries]
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 osmdroid-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid" }
