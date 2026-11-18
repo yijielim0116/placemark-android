@@ -1,4 +1,6 @@
-package org.setu.placemarklab2
+package org.setu.placemarklab2.views.marklist
+
+import org.setu.placemarklab2.PlacedMark
 
 interface OnMarkListener {
 

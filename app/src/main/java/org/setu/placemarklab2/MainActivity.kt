@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import android.widget.Button
 import android.content.Intent
 import org.setu.placemarklab2.views.addedit.AddEditView
+import org.setu.placemarklab2.views.marklist.MarkListView
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -50,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         viewMarksButton.setOnClickListener {
             Timber.d("View Marks pressed")
             startActivity(
-                Intent(this, MarkListActivity::class.java)
+                Intent(this, MarkListView::class.java)
             )
         }
 

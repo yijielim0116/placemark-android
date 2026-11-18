@@ -1,4 +1,4 @@
-package org.setu.placemarklab2
+package org.setu.placemarklab2.views.marklist
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.placemarklab2.PlacedMark
+import org.setu.placemarklab2.R
 import timber.log.Timber
 
 class PlacedMarkAdapter(
