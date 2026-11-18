@@ -40,7 +40,7 @@
             android:exported="false"
             android:label="Pick Location" />
         <activity
-            android:name=".MapListActivity"
+            android:name=".views.maplist.MapListView"
             android:exported="false"
             android:label="Map" />
     </application>

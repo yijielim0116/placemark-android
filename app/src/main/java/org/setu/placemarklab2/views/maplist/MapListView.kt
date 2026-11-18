@@ -1,6 +1,5 @@
-package org.setu.placemarklab2
+package org.setu.placemarklab2.views.maplist
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
@@ -15,10 +14,14 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.CopyrightOverlay
 import org.osmdroid.views.overlay.Marker
-import org.setu.placemarklab2.views.addedit.AddEditView
+import org.setu.placemarklab2.PlacedMark
+import org.setu.placemarklab2.R
 import timber.log.Timber
 
-class MapListActivity : AppCompatActivity() {
+// draws the map and the panel under it, and passes taps and button presses on to the presenter
+class MapListView : AppCompatActivity() {
+
+    private lateinit var presenter: MapListPresenter
 
     private lateinit var mapView: MapView
 
@@ -26,13 +29,6 @@ class MapListActivity : AppCompatActivity() {
     private lateinit var txtDescription: TextView
     private lateinit var imgPlace: ImageView
     private lateinit var editButton: Button
-
-    // the mark whose details are in the panel, null if none is selected
-    private var selectedId: Long? = null
-
-    // the map only zooms to fit everything the first time, so coming back from
-    // editing doesn't undo wherever I had scrolled to
-    private var zoomedToMarks = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +39,9 @@ class MapListActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_map_list)
 
-        Timber.d("MapListActivity created")
+        Timber.d("MapListView created")
+
+        presenter = MapListPresenter(this)
 
         // Initialise views
         mapView = findViewById(R.id.mapList)
@@ -60,40 +58,37 @@ class MapListActivity : AppCompatActivity() {
         mapView.overlays.add(CopyrightOverlay(this))
 
         findViewById<Button>(R.id.mapBackButton).setOnClickListener {
-            Timber.d("Back to menu pressed")
-            // the menu is still underneath this screen so just closing goes back to it
-            finish()
+            presenter.doReturnToMenu()
         }
 
         // nothing to edit until a marker has been tapped
         editButton.isEnabled = false
 
         editButton.setOnClickListener {
-            selectedId?.let { editMark(it) }
+            presenter.doEditSelected()
         }
     }
 
-    // reloads the markers every time the screen comes back, so an edit shows up on the map
-    private fun loadMarkers() {
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+        presenter.doLoadMarks()
+    }
 
-        val placemarks = AppData.placedMarks.findAll()
+    // draws a marker for every mark, taking the old ones off first but keeping the copyright overlay
+    fun showMarks(placemarks: List<PlacedMark>) {
 
-        Timber.d("Showing ${placemarks.size} marks on the map")
-
-        // take the old markers off first, but keep the copyright overlay
         mapView.overlays.removeAll { it is Marker }
 
         placemarks.forEach { placemark ->
 
             // x is the latitude and y is the longitude
-            val position = GeoPoint(
+            val marker = Marker(mapView)
+
+            marker.position = GeoPoint(
                 placemark.x,
                 placemark.y
             )
-
-            val marker = Marker(mapView)
-
-            marker.position = position
             marker.title = placemark.title
             marker.snippet = placemark.desc
 
@@ -105,9 +100,7 @@ class MapListActivity : AppCompatActivity() {
             // Handle marker selection
             marker.setOnMarkerClickListener { _, _ ->
 
-                Timber.d("Marker selected id=${placemark.id}, title=${placemark.title}")
-
-                displayPlace(placemark)
+                presenter.doSelectMark(placemark)
 
                 // Return true to consume the click
                 true
@@ -116,26 +109,11 @@ class MapListActivity : AppCompatActivity() {
             mapView.overlays.add(marker)
         }
 
-        if (placemarks.isEmpty()) {
-
-            // nothing to show, so say why instead of leaving an empty map
-            showEmptyMessage()
-
-        } else {
-
-            if (!zoomedToMarks) {
-                zoomToMarks(placemarks)
-                zoomedToMarks = true
-            }
-
-            refreshPanel()
-        }
-
         mapView.invalidate()
     }
 
     // zooms so every marker fits on screen
-    private fun zoomToMarks(placemarks: List<PlacedMark>) {
+    fun zoomToMarks(placemarks: List<PlacedMark>) {
 
         val box = BoundingBox.fromGeoPoints(
             placemarks.map { GeoPoint(it.x, it.y) }
@@ -160,9 +138,8 @@ class MapListActivity : AppCompatActivity() {
     }
 
     // fills the panel under the map with the mark I tapped
-    private fun displayPlace(placemark: PlacedMark) {
+    fun showPlacemark(placemark: PlacedMark) {
 
-        selectedId = placemark.id
         editButton.isEnabled = true
 
         txtTitle.text = placemark.title
@@ -178,28 +155,18 @@ class MapListActivity : AppCompatActivity() {
         }
     }
 
-    // after coming back from editing, show the new details for the mark that was selected
-    // (or reset the panel if that mark isn't there any more)
-    private fun refreshPanel() {
+    // resets the panel when no mark is selected
+    fun showNoSelection() {
 
-        val current = selectedId?.let { AppData.placedMarks.findOne(it) }
+        editButton.isEnabled = false
 
-        if (current != null) {
-            displayPlace(current)
-        } else {
-            selectedId = null
-            editButton.isEnabled = false
-            txtTitle.text = "No mark selected"
-            txtDescription.text = "Tap a marker on the map to see its details."
-            imgPlace.setImageDrawable(null)
-        }
+        txtTitle.text = "No mark selected"
+        txtDescription.text = "Tap a marker on the map to see its details."
+        imgPlace.setImageDrawable(null)
     }
 
-    private fun showEmptyMessage() {
+    fun showEmptyMessage() {
 
-        Timber.d("No marks to show on the map")
-
-        selectedId = null
         editButton.isEnabled = false
 
         txtTitle.text = "No marks yet"
@@ -211,24 +178,6 @@ class MapListActivity : AppCompatActivity() {
             "There are no marks to show yet",
             Toast.LENGTH_SHORT
         ).show()
-    }
-
-    private fun editMark(id: Long) {
-
-        Timber.d("Editing mark id=$id from the map")
-
-        val intent =
-            Intent(this, AddEditView::class.java)
-
-        intent.putExtra("id", id)
-
-        startActivity(intent)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-        loadMarkers()
     }
 
     override fun onPause() {

@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import android.widget.Button
 import android.content.Intent
 import org.setu.placemarklab2.views.addedit.AddEditView
+import org.setu.placemarklab2.views.maplist.MapListView
 import org.setu.placemarklab2.views.marklist.MarkListView
 import timber.log.Timber
 
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         mapViewButton.setOnClickListener {
             Timber.d("View Map pressed")
             startActivity(
-                Intent(this, MapListActivity::class.java)
+                Intent(this, MapListView::class.java)
             )
         }
 
