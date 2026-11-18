@@ -15,6 +15,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.CopyrightOverlay
 import org.osmdroid.views.overlay.Marker
+import org.setu.placemarklab2.views.addedit.AddEditView
 import timber.log.Timber
 
 class MapListActivity : AppCompatActivity() {
@@ -217,7 +218,7 @@ class MapListActivity : AppCompatActivity() {
         Timber.d("Editing mark id=$id from the map")
 
         val intent =
-            Intent(this, AddEditActivity::class.java)
+            Intent(this, AddEditView::class.java)
 
         intent.putExtra("id", id)
 

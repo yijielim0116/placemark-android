@@ -75,7 +75,7 @@ class MapPickerActivity : AppCompatActivity() {
 
             Timber.d("Location confirmed lat=${point.latitude}, lon=${point.longitude}")
 
-            // send the point back to AddEditActivity
+            // send the point back to the add/edit screen
             val result = intent
                 .putExtra("latitude", point.latitude)
                 .putExtra("longitude", point.longitude)

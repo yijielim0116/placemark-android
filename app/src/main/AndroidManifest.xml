@@ -30,7 +30,7 @@
             android:name=".MarkListActivity"
             android:exported="false" />
         <activity
-            android:name=".AddEditActivity"
+            android:name=".views.addedit.AddEditView"
             android:exported="false"
             android:label="Add / Edit Mark"
             android:theme="@style/Theme.PlacedMark"

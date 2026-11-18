@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.placemarklab2.views.addedit.AddEditView
 import timber.log.Timber
 
 class MarkListActivity : AppCompatActivity() {
@@ -78,7 +79,7 @@ class MarkListActivity : AppCompatActivity() {
         Timber.d("Editing mark id=${mark.id}, title=${mark.title}")
 
         val intent =
-            Intent(this, AddEditActivity::class.java)
+            Intent(this, AddEditView::class.java)
 
         intent.putExtra("id", mark.id)
 
