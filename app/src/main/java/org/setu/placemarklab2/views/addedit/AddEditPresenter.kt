@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import org.setu.placemarklab2.AppData
-import org.setu.placemarklab2.MapPickerActivity
+import org.setu.placemarklab2.views.mappicker.MapPickerView
 import org.setu.placemarklab2.PlacedMark
 import timber.log.Timber
 
@@ -133,7 +133,7 @@ class AddEditPresenter(private val view: AddEditView) {
 
         Timber.d("Pick Location pressed")
 
-        val intent = Intent(view, MapPickerActivity::class.java)
+        val intent = Intent(view, MapPickerView::class.java)
 
         // start the map where this mark already is (or wherever I typed), instead of always Waterford
         // only passed when both boxes are real coordinates, otherwise the map uses its default

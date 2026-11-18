@@ -36,7 +36,7 @@
             android:theme="@style/Theme.PlacedMark"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".MapPickerActivity"
+            android:name=".views.mappicker.MapPickerView"
             android:exported="false"
             android:label="Pick Location" />
         <activity
